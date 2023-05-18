@@ -1,0 +1,34 @@
+<h2>Cadastro de Produtos</h2>
+
+<form method="GET">
+    <input type="text" name="q" placeholder="Pesquisar" value="{% if query %}{{ query }}{% endif %}">
+    <button type="submit">Buscar</button>
+</form>
+
+{% if query %}
+    {% if listapostos %}
+        <p>Resultados da pesquisa para "{{ query }}":</p>
+        <ul>
+            {% for posto in listapostos %}
+                <li>
+                    <a href="{% url 'cadastro_produto_cliente' posto.id %}">{{ posto.nome }} - {{ posto.razao_social }} - {{ posto.cnpj }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum resultado encontrado para "{{ query }}".</p>
+    {% endif %}
+{% else %}
+    <p>Todos os clientes:</p>
+    <ul>
+        {% for posto in listapostos %}
+            <li>
+                <a href="{% url 'cadastro_produto_cliente' posto.id %}">{{ posto.nome }} - {{ posto.razao_social }} - {{ posto.cnpj }}</a>
+            </li>
+        {% empty %}
+            <li>Nenhum cliente cadastrado.</li>
+            <li> adadijda ijdai 8ijdas
+        {% endfor %}
+    </ul>
+{% endif %}
+

@@ -1,0 +1,14 @@
+<h2>Atualizar dados Cadastrais: {{posto_instance}}</h2>
+
+<a href = "{% url 'lista_clientes'%}"> Voltar</a>
+
+<form action="{% url 'cliente_update' posto_instance.id %}" method="POST">
+    {% csrf_token %}
+    
+    {{  form.as_p  }}
+
+    <button type="submit">Atualizar</button>
+</form>
+
+    
+<a href = "{% url 'cliente_delete' posto_instance.id %}"> Deletar </a>

@@ -1,0 +1,29 @@
+{% block content %}
+<h2>Lista de Produtos</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Produto</th>
+            <th>Posto</th>
+            <th>Data da última cobranças</th>
+            <th>Valor da Última Cobrança</th>
+            <th>Data de Atualização</th>
+            <th>Status</th>
+            <th>Atualizar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in produtos_list %}
+            <tr>
+                <td><a href="{% url 'historico_lista_cobrancas' item.produto.id %}">{{ item.produto.nome }}</a></td>
+                <td>{{ item.posto }}</td>
+                <td>{{ item.invoice_date|default_if_none:"-" }}</td>
+                <td>{{ item.valor_cobranca|default_if_none:"0.00"|floatformat:"2" }}</td>
+                <td>{{ item.data_atualizacao }}</td>
+                {% if item.produto.status %} <td>Ativo</td> {% else %} <td>Desativado</td>{% endif %}
+                {% if item.atualizar %} <td><a href="{% url 'atualizar_inflacao' item.idtypebiling %}"> Atualizar Valores </a></td>{% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

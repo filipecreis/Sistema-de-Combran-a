@@ -1,0 +1,9 @@
+
+    <form method="post">
+        {% csrf_token %}
+        <h2>Cadastro Tipo de Produto</h2>
+        {{ form_tipo_produto.as_p }}
+        <h2>Cadastro lógica de cobrança</h2>
+        {{ form_tye_billing.as_p }}
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </form>

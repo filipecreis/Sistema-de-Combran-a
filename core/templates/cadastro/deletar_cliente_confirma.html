@@ -1,0 +1,9 @@
+<h2>Tem certeza que deseja apagar os dados dos do cliente {{posto_instance}}</h2>
+
+<form method="POST" action="{% url 'cliente_delete' posto_instance.id %}">
+    {% csrf_token %}
+    <button type="submit">Deletar</button>
+
+    <a href="{% url 'cliente_update' posto_instance.id %}">voltar</a>
+
+</form>

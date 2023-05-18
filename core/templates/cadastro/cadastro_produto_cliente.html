@@ -1,0 +1,16 @@
+<h2>Cadastro de Produtos - {{ cliente.nome }}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <h3>Produto</h3>
+    {{ form_produto.as_p }}
+    <button type="submit">Cadastrar Produto</button>
+</form>
+
+
+<ul>
+    {% for produto_item in produtos_vinculados %}
+    {{produto_item.nome}}
+    <a href="{% url 'atualizar_produto' produto_id=produto_item.id %}">Atualizar</a>
+    {% endfor %}
+  </ul>

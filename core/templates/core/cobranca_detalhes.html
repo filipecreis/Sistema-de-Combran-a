@@ -1,0 +1,19 @@
+
+<h1>Detalhes da Cobrança</h1>
+
+<p>Status: {% if cobranca.status == 0 %} Cancelado {% elif cobranca.status == 1 %} Cobrança realizada {% else %} Pagamento efetuado {% endif %}</p>
+<p>Data da Fatura: {{ cobranca.invoice_date }}</p>
+<p>Data do Pagamento: {{ cobranca.pay_date }}</p>
+<p>Quantidade Bonificado: {{ cobranca.quantidade_bonificado }}</p>
+<p>Quantidade Gerencial: {{ cobranca.quantidade_gerencial }}</p>
+<p>Quantidade Pago: {{ cobranca.quantidade_pago }}</p>
+<p>Quantidade Gotas: {{ cobranca.quantidade_gotas }}</p>
+<p>Cobrado Bonificado: R$ {{ cobranca.cobrado_bonificado|floatformat:"2" }}</p>
+<p>Cobrado Gerencial: R$ {{ cobranca.cobrado_gerencial|floatformat:"2" }}</p>
+<p>Cobrado Pago: R$ {{ cobranca.cobrado_pago|floatformat:"2" }}</p>
+<p>Fixo: R$ {{ cobranca.fixo|floatformat:"2" }}</p>
+<p>Desconto: R$ {{ cobranca.desconto|floatformat:"2" }}</p>
+<p>Descrição do Desconto: {{ cobranca.descricao_desconto }}</p>
+<p>Total Cobrado: R$ {{ cobranca.cobrado_total|floatformat:"2" }}</p>
+
+<a href="{% url 'edit_billing_status' billing_id=cobranca.id %}">Editar Status de Cobrança</a>

@@ -1,0 +1,25 @@
+
+{% block content %}
+    <h2>Lista de Cobranças: {{ produto.nome }}</h2>
+    <p>Posto: {{ produto.posto.nome }}</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Data da Cobrança</th>
+                <th>Valor Total</th>
+                <th>status de cobrança</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cobrancas_list %}
+                <tr>
+                    <td>{{ item.cobranca.invoice_date }}</td>
+                    <td>{{ item.valor_total|floatformat:"2" }}</td>
+                    <td>{% if item.cobranca.status == 0 %} Cancelado {% elif item.cobranca.status == 1 %} Cobrança realizada {% elif item.cobranca.status == 2 %} Pagamento efetuado {% else %} Erro {% endif %}</td>
+                    <td><a href="{% url 'cobranca_detalhes' item.cobranca.id %}"> detralhes</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

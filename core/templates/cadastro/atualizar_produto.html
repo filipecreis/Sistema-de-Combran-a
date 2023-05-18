@@ -1,0 +1,8 @@
+    <h2>Atualizar Produto</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form_produto.as_p }}
+        <h2>Tipo Billing</h2>
+        {{ form_tipo_billing.as_p }}
+        <button type="submit">Salvar</button>
+    </form>

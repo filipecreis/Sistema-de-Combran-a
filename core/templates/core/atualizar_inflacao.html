@@ -1,0 +1,67 @@
+{% block content %}
+    <h2>Atualizar Inflação</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            Pago atual: R$ {{ form.instance.pago|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.pago.label_tag }} {{ form.pago }}
+        </p>
+        <p>
+            Bonificado atual: R$ {{ form.instance.bonificado|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.bonificado.label_tag }} {{ form.bonificado }}
+        </p>
+        <p>
+            Gerencial atual: R$ {{ form.instance.gerencial|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.gerencial.label_tag }} {{ form.gerencial }}
+        </p>
+        <p>
+            Pago gotas atual: R$ {{ form.instance.pago_gotas|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.pago_gotas.label_tag }} {{ form.pago_gotas }}
+        </p>
+        <p>
+            Bonificado gotas atual: R$ {{ form.instance.integracao_gotas|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.integracao_gotas.label_tag }} {{ form.integracao_gotas }}
+        </p>
+        <p>
+            Gerencial gotas atual: R$ {{ form.instance.fixo_variavel|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.fixo_variavel.label_tag }} {{ form.fixo_variavel }}
+        </p>
+        <p>
+            Fixo atual: R$ {{ form.instance.fixo|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.fixo.label_tag }} {{ form.fixo }}
+        </p>
+        <p>
+            Aditivo atual: R$ {{ form.instance.aditivo|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.aditivo.label_tag }} {{ form.aditivo }}
+        </p>
+        <p>
+            Máximo atual: R$ {{ form.instance.maximo|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.maximo.label_tag }} {{ form.maximo }}
+        </p>
+        <p>
+            Mínimo atual: R$ {{ form.instance.minimo|default_if_none:"0.00"|floatformat:2 }}
+            <br>
+            {{ form.minimo.label_tag }} {{ form.minimo }}
+        </p>
+        <p>
+            Data de atualização atual: {{ form.instance.data_atualizacao }}
+            <br>
+            {{ form.data_atualizacao.label_tag }} {{ form.data_atualizacao }}
+        </p>
+        <p>
+            Data da última atualização atual: {{ form.instance.data_ultima_atualizacao }}
+            <br>
+            {{ form.data_ultima_atualizacao.label_tag }} {{ form.data_ultima_atualizacao }}
+        </p>
+        <button type="submit">Atualizar</button>
+    </form>
+{% endblock %}

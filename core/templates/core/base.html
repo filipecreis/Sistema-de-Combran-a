@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Seu Projeto{% endblock %}</title>
+    <!-- Inclua aqui os arquivos de CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- Adicione aqui os links para navegação -->
+            <a href="{% url 'lista_produtos' %}">Lista de Produtos</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <!-- Adicione aqui o conteúdo do rodapé -->
+        <p>&copy; Seu Projeto. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Inclua aqui os arquivos de JavaScript -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

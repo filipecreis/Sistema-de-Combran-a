@@ -1,6 +1,13 @@
 from django.db import models
 from datetime import date
 
+class Rede_cliente(models.Model):
+    nome = models.CharField(max_length = 100, blank=True, null= True)
+    matriz = models.IntegerField(blank = True, null=True, default=0)
+
+    def __str__(self):
+        return self.nome
+
 class Posto(models.Model):
     nome = models.CharField(max_length = 50, blank=False, null=False)
     razao_social = models.CharField(max_length = 100, blank=False, null=False)
@@ -15,6 +22,7 @@ class Posto(models.Model):
     nome_responsavel = models.CharField(max_length = 100, blank=False, null=False)
     email = models.CharField(max_length = 100, blank=False, null=False)
     telefone = models.CharField(max_length = 100, blank=False, null=False)
+    rede_id = models.ForeignKey(Rede_cliente, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
         return self.nome
@@ -47,7 +55,7 @@ class Tipo_produto(models.Model):
     codigo_equipamento = models.IntegerField(blank=False, null=False, default=0)
     descricao = models.CharField(max_length=100)
     corpo_email = models.TextField()
-    produto_id = models.OneToOneField(Produto)
+    produto_id = models.OneToOneField(Produto, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.nome
@@ -74,17 +82,19 @@ class Billing(models.Model):
     valor_total_pago_gotas = models.FloatField(default=0)
     valor_total_integracao_gotas = models.FloatField(default=0)
     fixo = models.FloatField(default=0)
+    fixo_variavel = models.FloatField(default=0) ## novo
     desconto = models.FloatField(default=0)
     descricao_desconto = models.TextField(default=0)
     cobrado_total = models.FloatField(default=0)
     produto_id = models.ForeignKey(Produto, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.status)
+        return str(self.invoice_date)
     
 
 class Type_billing(models.Model):
-    venda = models.BooleanField()
+    venda = models.FloatField(default=0)
+    parcela_venda = models.FloatField(default=0)
     moedeiro_encerrante = models.FloatField(default=0)
     pago = models.FloatField(default=0)
     bonificado = models.FloatField(default=0)
@@ -114,13 +124,3 @@ class Ordem_servico(models.Model):
     
     def __str__(self):
         return self.data_hora
-
-
-class Rede_cliente(models.Model):
-    nome = models.CharField(max_length = 100, blank=True, null= True)
-    matriz = models.IntegerField(blank = True, null=True, default=0)
-    produto = models.OneToOneField(Produto, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.nome
-    

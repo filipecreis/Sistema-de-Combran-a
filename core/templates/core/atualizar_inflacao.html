@@ -1,5 +1,8 @@
 {% block content %}
     <h2>Atualizar Inflação</h2>
+
+    <p>inflação acumuda 12 meses: {{ipca|floatformat:2}}%</p>
+
     <form method="post">
         {% csrf_token %}
         <p>

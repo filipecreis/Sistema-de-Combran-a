@@ -45,6 +45,12 @@ class Atualizacao(forms.ModelForm):
         fields = ['pago', 'bonificado', 'gerencial', 'pago_gotas',
                   'integracao_gotas', 'fixo_variavel', 'fixo', 'maximo',
                   'minimo', 'data_atualizacao', 'data_ultima_atualizacao']
+    
+    
+class BillingVendaFixaForm(forms.ModelForm):
+    class Meta:
+        model = Billing
+        fields = ['invoice_date', 'pay_date', 'desconto', 'descricao_desconto', 'cobrado_total']
         
         
 

@@ -4,8 +4,16 @@ from .forms import BillingStatusForm, Atualizacao
 from .auxiliar import checar_atualizacao, ipca_acumulado
 
 def produtos_historico_cobranca(request):
+    
     produtos = Produto.objects.all().order_by('-status')
     produtos_list = []
+    
+    search_query = request.GET.get('search', '')
+    if search_query:
+        produtos = Produto.objects.filter(posto_id__nome__icontains=search_query).order_by('-status')
+    else:
+        produtos = Produto.objects.all().order_by('-status')
+    
     
     for prod in produtos:
         posto_relacionado = prod.posto_id.nome

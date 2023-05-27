@@ -1,0 +1,148 @@
+{% block content %}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+  <form id="billingForm" class="container mt-4" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+
+      {% if on_precobranca_encerrante %} 
+        <a class="btn btn-primary" href="https://wa.me/{{ numero_telefone }}?text={{ mensagem | urlencode }}" target="_blank">Enviar uma mensagem no WhatsApp</a>
+        <div class="mt-2">
+          <label for="encerrante">Encerrante:</label>
+          <input id="encerrante" class="form-control" name="encerrante" value="{{ form.encerrante.value }}" />
+        </div>
+      {% else %}
+        <div class="mt-2">
+            <label for="encerrante">Encerrante:</label>
+              <br>
+              <input id="encerrante" class="form-control" name="encerrante" value="{{ form.encerrante.value }}" readonly />
+          </div>
+      {% endif %}
+
+      {% if on_pago %}
+        <div class="mt-2">
+          <label for="quant_pago">Pago:</label>
+          <input id="quant_pago" class="form-control" name="quant_pago" value="{{ form.quant_pago.value }}" />
+        </div>
+      {% else %}
+        <div class="mt-2">
+            <label for="quant_pago">Pago:</label>
+              <br>
+              <input id="quant_pago" class="form-control" name="quant_pago" value="{{ form.quant_pago.value }}" readonly />
+          </div>
+      {% endif %}
+      
+      {% if on_bonificado %}
+      <div class="mt-2">
+        <label for="quant_bonificado">Bonificado:</label>
+        <input id="quant_bonificado" class="form-control" name="quant_bonificado" value="{{ form.quant_bonificado.value }}" />
+      </div>
+    {% else %}
+      <div class="mt-2">
+          <label for="quant_bonificado">Bonificado:</label>
+            <br>
+            <input id="quant_bonificado" class="form-control" name="quant_bonificado" value="{{ form.quant_bonificado.value }}" readonly />
+        </div>
+    {% endif %}
+
+      {% if on_gerencial %}
+        <div class="mt-2">
+          <label for="quant_gerencial">Gerencial:</label>
+          <input id="quant_gerencial" class="form-control" name="quant_gerencial" value="{{ form.quant_gerencial.value }}" />
+        </div>
+      {% else %}
+        <div class="mt-2">
+            <label for="quant_gerencial">Gerencial:</label>
+              <br>
+              <input id="quant_gerencial" class="form-control" name="quant_gerencial" value="{{ form.quant_gerencial.value }}" readonly />
+          </div>
+      {% endif %}
+
+      {% if on_pago_gotas %}
+            <div class="mt-2">
+                <label for="quant_pago_gotas">Gotas:</label>
+                <input id="quant_pago_gotas" class="form-control" name="quant_pago_gotas" value="{{ form.quant_pago_gotas.value }}" />
+            </div>
+      {% else %}
+            <div class="mt-2">
+                <label for="quant_pago_gotas">Bonificado:</label>
+                <br>
+                <input id="quant_pago_gotas" class="form-control" name="quant_pago_gotas" value="{{ form.quant_pago_gotas.value }}" readonly />
+            </div>
+      {% endif %}
+
+      {% if on_integracao_gotas %}
+            <div class="mt-2">
+                <label for="quant_integracao_gotas">Integração Gotas:</label>
+                <br>
+                <input id="quant_integracao_gotas" class="form-control" name="quant_integracao_gotas" value="{{ form.quant_integracao_gotas.value }}" />
+            </div>
+      {% else %}
+      <div class="mt-2">
+            <label for="quant_integracao_gotas">Integração Gotas:</label>
+            <br>
+            <input id="quant_integracao_gotas" class="form-control" name="quant_integracao_gotas" value="{{ form.quant_integracao_gotas.value }}" readonly />
+        </div>
+      {% endif %}
+
+      <div class="mt-2">
+        <label for="desconto">Desconto:</label>
+        <br>
+        <input id="desconto" class="form-control" name="desconto" value="{{ form.desconto.value }}"/>
+      </div>
+
+      <div class="mt-2">
+        <label for="descricao_desconto">Explicação do desconto:</label>
+        <br>
+        <textarea id="descricao_desconto" class="form-control" name="descricao_desconto" rows="4" cols="50"></textarea>
+      </div>
+
+      <div class="mt-2">
+        <label for="invoice_date">Dia da Cobrança</label>
+        <br>
+        <input id="invoice_date" class="form-control" name="invoice_date" value="{{ form.invoice_date.value|date:'d/m/Y' }}" />
+      </div>
+      
+      <div class="mt-2">
+        <label for="pay_date">Vencimento da Nota:</label>
+        <br>
+        <input id="pay_date" class="form-control" name="pay_date" value="{{ form.pay_date.value|date:'d/m/Y' }}" />
+      </div>
+      
+      <div class="mt-2">
+        <label for="cobrado_total">Valor da Nota:</label>
+        <br>
+        <input id="cobrado_total" class="form-control" name="cobrado_total" value="{{ form.cobrado_total.value }}"/>
+      </div>
+
+      <button type="submit" class="btn btn-success mt-3">Submit</button>
+      <button type="button" id="recalcular" class="btn btn-warning mt-3">Recalcular</button>
+
+    </div>
+  </form>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $('#recalcular').on('click', function(e) {
+        e.preventDefault();
+        let formData = new FormData(document.querySelector('#billingForm'));
+
+        fetch('{{ recalcular_url }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error){
+                alert(data.error);
+            } else {
+                $('#cobrado_total').val(data.cobrado_total);
+            }
+        })
+        .catch(error => alert(error));
+    });
+  </script>
+{% endblock %}

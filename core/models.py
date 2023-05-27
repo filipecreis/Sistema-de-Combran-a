@@ -76,11 +76,6 @@ class Billing(models.Model):
     quant_pago = models.FloatField(default=0)
     quant_pago_gotas = models.FloatField(default=0)
     quant_integracao_gotas = models.FloatField(default=0)
-    valor_total_bonificado = models.FloatField(default=0)
-    valor_total_gerencial = models.FloatField(default=0)
-    valor_total_pago = models.FloatField(default=0)
-    valor_total_pago_gotas = models.FloatField(default=0)
-    valor_total_integracao_gotas = models.FloatField(default=0)
     fixo = models.FloatField(default=0)
     fixo_variavel = models.FloatField(default=0) ## novo
     desconto = models.FloatField(default=0)

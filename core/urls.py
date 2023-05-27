@@ -3,10 +3,10 @@ from .views_historico import produtos_historico_cobranca, historico_lista_cobran
 from .views_cobranca import (
     lista_cobranca,
     efetuar_cobranca,
-    cobranca_venda,
-    parcela_fixa,
-    recalcular
-    
+    #cobranca_venda,
+    #parcela_fixa,
+    recalcular,
+    valor_nota
     )
 
 urlpatterns = [
@@ -19,12 +19,14 @@ urlpatterns = [
     url(r'^atualizar_inflacao/(?P<type_billing_id>\d+)/$', atualizar_inflacao, name='atualizar_inflacao'),
     
     url(r'^cobranca/$', lista_cobranca, name='principal_cobranca'),
-    url(r'^cobranca/efetuar_cobranca/(?P<produto_id>\d+)/$$', efetuar_cobranca, name='efetuar_cobranca'),
+    url(r'^cobranca/efetuar_cobranca/(?P<produto_id>\d+)/$', efetuar_cobranca, name='efetuar_cobranca'),
+    url(r'^valor_nota/(?P<produto_id>\d+)/$', valor_nota, name='valor_nota'),
+
     
-    
-    url(r'^cobranca/venda/(?P<produto_id>\d+)/$', cobranca_venda, name='cobranca_venda'),
-    url(r'^cobranca/fixa/(?P<produto_id>\d+)/$', parcela_fixa, name='parcela_fixa'),
+    #url(r'^cobranca/venda/(?P<produto_id>\d+)/$', cobranca_venda, name='cobranca_venda'),
+    #url(r'^cobranca/fixa/(?P<produto_id>\d+)/$', parcela_fixa, name='parcela_fixa'),
     url(r'^cobranca/recalcular/$', recalcular, name='recalcular'),
+    url(r'^cobranca/calcular/(?P<produto_id>\d+)/$', valor_nota, name='calcular')
     
     
 ]

@@ -1,7 +1,13 @@
 {% block content %}
-<h2>Lista de Produtos</h2>
-<table>
-    <thead>
+<h2 class="mb-4">Lista de Produtos</h2>
+
+<form method="GET" action="">
+    <input type="text" name="search" placeholder="Buscar por posto">
+    <button type="submit">Buscar</button>
+</form>
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
         <tr>
             <th>Produto</th>
             <th>Posto</th>
@@ -22,8 +28,8 @@
                 <td>{{ item.invoice_date|default_if_none:"-" }}</td>
                 <td>{{ item.valor_cobranca|default_if_none:"0.00"|floatformat:"2" }}</td>
                 <td>{{ item.data_atualizacao }}</td>
-                {% if item.produto.status %} <td>Ativo</td> {% else %} <td>Desativado</td>{% endif %}
-                {% if item.atualizar %} <td><a href="{% url 'atualizar_inflacao' item.idtypebiling %}"> Atualizar Valores </a></td>{% endif %}
+                {% if item.produto.status %} <td class="text-success">Ativo</td> {% else %} <td class="text-danger">Desativado</td>{% endif %}
+                {% if item.atualizar %} <td><a href="{% url 'atualizar_inflacao' item.idtypebiling %}" class="btn btn-primary"> Atualizar Valores </a></td>{% endif %}
             </tr>
         {% endfor %}
     </tbody>

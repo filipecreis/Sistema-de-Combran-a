@@ -6,21 +6,23 @@ import pandas as pd
 from datetime import datetime
 
 
-def checar_atualizacao(proxima_atualizacao):
-    if proxima_atualizacao and proxima_atualizacao.venda==0:
-        data_proxima_atualizacao = proxima_atualizacao.data_atualizacao
-        if proxima_atualizacao.data_atualizacao <= datetime.now().date():
-            atualizar = True
-            id_typebillinng = proxima_atualizacao.id
-        else:
-            atualizar = False
-            id_typebillinng = None
-    else:
-        data_proxima_atualizacao = None
-        atualizar = False
-        id_typebillinng = None
+def checar_atualizacao(proxima_atualizacao, status_produto):
+   
+    # inicializa as variáveis com valores padrão
+    data_proxima_atualizacao = None
+    atualizar = False
+    id_typebilling = None
     
-    return data_proxima_atualizacao, atualizar, id_typebillinng
+    # verifica se a próxima atualização existe e se a venda está desativada (0)
+    if proxima_atualizacao and not proxima_atualizacao.venda and status_produto:
+        data_proxima_atualizacao = proxima_atualizacao.data_atualizacao
+        # verifica se a data da próxima atualização já passou
+        if data_proxima_atualizacao <= datetime.utcnow().date():
+            atualizar = True
+            id_typebilling = proxima_atualizacao.id
+    
+    return data_proxima_atualizacao, atualizar, id_typebilling
+
 
 
 def total_cobrado(produto_id):

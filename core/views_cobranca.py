@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Produto, Type_billing, Billing, Rede_cliente
-from .forms import BillingStatusForm, Atualizacao, BillingVendaFixaForm, BillingForm
+from .models import Produto, Type_billing, Billing, Posto
+from .forms import BillingForm
 from datetime import datetime
 from .auxiliar import total_cobrado, checar_atualizacao
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
-
 
 
 def lista_cobranca(request):
@@ -45,7 +44,7 @@ def lista_cobranca(request):
                 invoice_date = None
 
             ## Habilitar link de atualização
-            data_proxima_atualizacao, atualizar, id_typebillinng = checar_atualizacao(proxima_atualizacao)
+            data_proxima_atualizacao, atualizar, id_typebillinng = checar_atualizacao(proxima_atualizacao, True)
             
             produtos_list.append({
                 'produto': prod,
@@ -69,7 +68,7 @@ def efetuar_cobranca(request, produto_id):
     if dados_cobranca is None:
         return HttpResponse('Efetue o cadastro dos dados de cobrança', status=404)
     else:
-         return inserir_dados_cobranca(request, produto_id, dados_cobranca)
+        return inserir_dados_cobranca(request, produto_id, dados_cobranca)
 
 
 def inserir_dados_cobranca(request, produto_id, dados_cobranca):
@@ -86,7 +85,7 @@ def inserir_dados_cobranca(request, produto_id, dados_cobranca):
             Billing.produto_id = produto
             Billing.status = 1 # coloca a espera do pagamento
             Billing.save()
-            return redirect('efetuar_cobranca', produto_id=produto.id)
+            return efetuar_cobranca(request, dados_cobranca)
     
     form = BillingForm(initial={'cobrado_total': float(cobrado_total)})
     
@@ -119,7 +118,7 @@ def tipo_cobranca(dados_cobranca, produto_id):
                 
         else:
             cobrado_total = dados_cobranca.fixo
-                
+    
     else:
         cobrado_total = 0
         recalcular_url = reverse('valor_nota', args=[produto_id])
@@ -173,10 +172,13 @@ def formula_cobranca(desconto, encerrante, pago, bonificado, gerencial, pago_got
     
     if(dados_cobranca.moedeiro_encerrante != 0):
         ultima_cobranca = Billing.objects.filter(produto_id=dados_cobranca.produto_id).exclude(status=0).order_by('id').first()
+        print(encerrante)
         if ultima_cobranca is not None:
             ultimo_encerrante = ultima_cobranca.encerrante
+            
         else:
             ultimo_encerrante = 0
+            
     
     valor_encerrante = dados_cobranca.moedeiro_encerrante*(encerrante - ultimo_encerrante)
     valor_pago = dados_cobranca.pago*pago
@@ -188,7 +190,7 @@ def formula_cobranca(desconto, encerrante, pago, bonificado, gerencial, pago_got
     
    
     
-    if(total > dados_cobranca.maximo):
+    if(total > dados_cobranca.maximo and dados_cobranca.maximo!=0):
         total = dados_cobranca.maximo
     elif(total < dados_cobranca.minimo):
         total = dados_cobranca.minimo
@@ -212,5 +214,66 @@ def habilitar(dados_cobranca):
             on_integracao_gotas)
 
 
+def efetuar_cobranca(request, dados_cobranca):
+    
+   print("ola" )
+
+"""
+def texto_email(dados_cobranca):
+    
+    dados_produto = Produto.objects.filter(produto_id=dados_cobranca.produto_id)
+    dados_posto = Posto.objects.filter(produto_id=dados_produto.posto_id)
+    cobrancas = Billing.objects.filter(produto_id=dados_cobranca.produto_id).exclude(status=0).order_by('id')[:2]
+    
+    
+    lista_palavras_chave = ["{posto}","{nome_financeiro}","{mes_atual}","{mes_anterior}","{ano}","{produto}",
+                            "{pago_v}","{bonificado_v}","{gerencial_v}", "{gotas_v}","{gotas_integrada_v}",
+                            "{pago_q}","{bonificado_q}","{gerencial_q}","{gotas_q}","{gotas_integrada_q}",
+                            "{pago_t}","{bonificado_t}","{gerencial_t}","{gotas_t}","{gotas_integrada_t}",
+                            "{vencimento_boleto}","{valor_boleto}","{total_vaucher}"]
+    
+    
+    posto = dados_posto.nome
+    nome_financeiro = dados_cobranca.nome_financeiro
+    mes_atual = 
+    mes_anterior = 
+    ano = 
+    produto = 
+    pago_v = dados_cobranca.
+    bonificado_v = dados_cobranca.
+    gerencial_v = dados_cobranca.
+    gotas_v = dados_cobranca.
+    gotas_integrada_v = dados_cobranca.
+    pago_q = ultima_cobranca.
+    bonificado_q = ultima_cobranca.
+    gerencial_q = ultima_cobranca.
+    gotas_q = ultima_cobranca.
+    gotas_integrada_q = ultima_cobranca.
+    pago_t = dados_cobranca.
+    bonificado_t = dados_cobranca.
+    gerencial_t = dados_cobranca.
+    gotas_t = dados_cobranca.
+    gotas_integrada_t = dados_cobranca.
+    vencimento_boleto = ultima_cobranca.
+    valor_boleto = ultima_cobranca.
+    total_vaucher = 
 
     
+    valor_variaveis = 
+    
+    texto_email = dados_cobranca.email_cobranca
+    
+    for i in range(len(lista_palavras_chave)):
+        texto_email = texto_email.replace(lista_palavras_chave[i], valor_variaveis[i])
+
+
+    if(total > dados_cobranca.maximo and dados_cobranca.maximo!=0):
+        texto_email = texto_email.replace("{msg_max_min}", "Vale ressaltar que o valor calculado excedeu o valor máximo estabelecido em nosso contrato." )
+    elif(total < dados_cobranca.minimo):
+        total = dados_cobranca.minimo
+        texto_email = texto_email.replace("{msg_max_min}","Vale ressaltar que o valor calculado não excede o valor mínimo estabelecido em nosso contrato.")
+    else:
+        texto_email = texto_email.replace("{msg_max_min}","")
+    
+    return texto_email
+"""

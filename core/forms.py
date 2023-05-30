@@ -46,20 +46,6 @@ class Atualizacao(forms.ModelForm):
                   'minimo', 'data_atualizacao', 'data_ultima_atualizacao']
     
 
-class BillingVendaFixaForm(forms.ModelForm):
-    
-    cobrado_total = forms.FloatField(widget=forms.NumberInput(
-        attrs={'readonly': True}))
-    
-    class Meta:
-        model = Billing
-        fields = ['invoice_date',
-                  'pay_date',
-                  'desconto',
-                  'descricao_desconto',
-                  'cobrado_total']
-        
-
 class BillingForm(forms.ModelForm):
     class Meta:
         model = Billing

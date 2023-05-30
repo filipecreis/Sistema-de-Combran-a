@@ -54,7 +54,6 @@ class Tipo_produto(models.Model):
     nome = models.CharField(max_length = 100, blank=False, null= False)
     codigo_equipamento = models.IntegerField(blank=False, null=False, default=0)
     descricao = models.CharField(max_length=100)
-    corpo_email = models.TextField()
     produto_id = models.OneToOneField(Produto, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -105,7 +104,7 @@ class Type_billing(models.Model):
     data_ultima_atualizacao = models.DateField(default=date.today)
     nome_financeiro = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
-    email_cobranca = models.CharField(max_length=200)
+    corpo_email = models.TextField(default="0")
     produto_id = models.OneToOneField(Produto, on_delete=models.CASCADE)
     
     def __str__(self):

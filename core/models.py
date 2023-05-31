@@ -27,6 +27,13 @@ class Posto(models.Model):
     def __str__(self):
         return self.nome
 
+class Tipo_produto(models.Model):
+    nome = models.CharField(max_length = 100, blank=False, null= False)
+    codigo_equipamento = models.IntegerField(blank=False, null=False, default=0)
+    descricao = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nome
 
 class Produto(models.Model):
     
@@ -44,21 +51,11 @@ class Produto(models.Model):
     codigo_primario = models.IntegerField(default=0)
     condigo_secundario = models.IntegerField(default=0)
     posto_id = models.ForeignKey(Posto, on_delete=models.CASCADE)
-    
+    tipo_produto_id = models.ForeignKey(Tipo_produto, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.nome
 
-
-class Tipo_produto(models.Model):
-    nome = models.CharField(max_length = 100, blank=False, null= False)
-    codigo_equipamento = models.IntegerField(blank=False, null=False, default=0)
-    descricao = models.CharField(max_length=100)
-    produto_id = models.OneToOneField(Produto, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.nome
-    
 
 class Billing(models.Model):
     STATUS_CHOICES = [

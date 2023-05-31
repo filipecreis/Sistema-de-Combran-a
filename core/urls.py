@@ -56,4 +56,3 @@ urlpatterns = [
     cadastro_tipo_billing,
     atualizar_produto,
     """
-

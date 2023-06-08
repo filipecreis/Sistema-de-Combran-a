@@ -3,10 +3,9 @@ from .views_historico import produtos_historico_cobranca, historico_lista_cobran
 from .views_cobranca import (
     lista_cobranca,
     efetuar_cobranca,
-    #cobranca_venda,
-    #parcela_fixa,
     recalcular,
-    valor_nota
+    valor_nota,
+    prepara_email
     )
 
 urlpatterns = [
@@ -23,10 +22,11 @@ urlpatterns = [
     url(r'^valor_nota/(?P<produto_id>\d+)/$', valor_nota, name='valor_nota'),
 
     
-    #url(r'^cobranca/venda/(?P<produto_id>\d+)/$', cobranca_venda, name='cobranca_venda'),
-    #url(r'^cobranca/fixa/(?P<produto_id>\d+)/$', parcela_fixa, name='parcela_fixa'),
+   
     url(r'^cobranca/recalcular/$', recalcular, name='recalcular'),
-    url(r'^cobranca/calcular/(?P<produto_id>\d+)/$', valor_nota, name='calcular')
+    url(r'^cobranca/calcular/(?P<produto_id>\d+)/$', valor_nota, name='calcular'),
+    
+    url(r'^enviar_email/$', prepara_email, name='enviar_email'),
     
     
 ]

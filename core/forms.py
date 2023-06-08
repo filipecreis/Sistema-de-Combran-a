@@ -41,9 +41,17 @@ class BillingStatusForm(forms.ModelForm):
 class Atualizacao(forms.ModelForm):
     class Meta:
         model = Type_billing
-        fields = ['pago', 'bonificado', 'gerencial', 'pago_gotas',
-                  'integracao_gotas', 'fixo_variavel', 'fixo', 'maximo',
-                  'minimo', 'data_atualizacao', 'data_ultima_atualizacao']
+        fields = ['pago', 
+                  'bonificado', 
+                  'gerencial', 
+                  'pago_gotas',
+                  'integracao_gotas', 
+                  'fixo_variavel', 
+                  'fixo', 
+                  'maximo',
+                  'minimo', 
+                  'data_atualizacao', 
+                  'data_ultima_atualizacao']
     
 
 class BillingForm(forms.ModelForm):
@@ -61,3 +69,10 @@ class BillingForm(forms.ModelForm):
                   'descricao_desconto',
                   'cobrado_total'
                   ]
+
+
+class EmailForm(forms.Form):
+    
+    body = forms.CharField(widget=forms.Textarea)
+    attachments = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    

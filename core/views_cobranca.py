@@ -1,10 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render
 from .models import Produto, Type_billing, Billing
-from .forms import BillingForm
+from .forms import BillingForm, EmailForm
 from datetime import datetime
-from .auxiliar import total_cobrado, checar_atualizacao, texto_email
+from .auxiliar import total_cobrado, checar_atualizacao
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
+from .preparar_email import send_email_with_attachment,enviar_email_cobranca
+from .email_data import EmailData
+from .api_egestor import cobranca_boleto
 
 
 def lista_cobranca(request):
@@ -85,7 +88,7 @@ def inserir_dados_cobranca(request, produto_id, dados_cobranca):
             Billing.produto_id = produto
             Billing.status = 1 # coloca a espera do pagamento
             Billing.save()
-            return enviar_email(request, produto_id,dados_cobranca)
+            return prepara_email(request, produto_id,dados_cobranca)
     
     form = BillingForm(initial={'cobrado_total': float(cobrado_total)})
     
@@ -211,8 +214,14 @@ def habilitar(dados_cobranca):
             on_integracao_gotas)
 
 
-def enviar_email(request, produto_id,dados_cobranca):
+def prepara_email(request, produto_id, dados_cobranca):
     
-    texto = texto_email(dados_cobranca)
-    return render(request, 'cobranca/teste.html', {'mensagem': texto})
+    #email_data = EmailData(dados_cobranca)
+    #subject, email_body, billing_email = email_data.prepare_email()
+    #pdf_path_boleto, pdf_path_recibo  = cobranca_boleto()
+    #send_email_with_attachment(subject, email_body, billing_email, pdf_path_boleto, pdf_path_recibo)
+    enviar_email_cobranca(dados_cobranca)
     
+    form = EmailForm()
+    
+    return render(request, 'cobranca/teste.html', {'form': form})

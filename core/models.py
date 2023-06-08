@@ -20,8 +20,9 @@ class Posto(models.Model):
     bairro = models.CharField(max_length = 100, blank=False, null=False)
     estado = models.CharField(max_length = 100, blank=False, null=False)
     nome_responsavel = models.CharField(max_length = 100, blank=False, null=False)
-    email = models.CharField(max_length = 100, blank=False, null=False)
-    telefone = models.CharField(max_length = 100, blank=False, null=False)
+    email_responsavel = models.CharField(max_length = 100, blank=False, null=False)
+    telefone_responsavel = models.CharField(max_length = 100, blank=False, null=False)
+    id_egestor = models.IntegerField(blank=False, null=False, default=1)
     rede_id = models.ForeignKey(Rede_cliente, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
@@ -29,8 +30,7 @@ class Posto(models.Model):
 
 class Tipo_produto(models.Model):
     nome = models.CharField(max_length = 100, blank=False, null= False)
-    codigo_equipamento = models.IntegerField(blank=False, null=False, default=0)
-    descricao = models.CharField(max_length=100)
+    codigo_egestor = models.IntegerField(blank=False, null=False, default=0)
     
     def __str__(self):
         return self.nome
@@ -41,7 +41,6 @@ class Produto(models.Model):
     (True, 'Ativo'),
     (False, 'Desativado'),
     ]
-    
     nome = models.CharField(max_length=100)
     nome_display = models.CharField(max_length=100, blank=True, null=True)
     codigo_equipamento = models.IntegerField(blank=True, null=True)
@@ -84,24 +83,25 @@ class Billing(models.Model):
     
 
 class Type_billing(models.Model):
-    venda = models.FloatField(default=0)
-    parcela_venda = models.FloatField(default=0)
-    moedeiro_encerrante = models.FloatField(default=0)
-    pago = models.FloatField(default=0)
-    bonificado = models.FloatField(default=0)
-    gerencial = models.FloatField(default=0)
-    pago_gotas = models.FloatField(default=0)
-    integracao_gotas = models.FloatField(default=0)
-    maximo = models.FloatField(default=0)
-    minimo = models.FloatField(default=0)
-    chave = models.CharField(max_length=100)
-    fixo = models.FloatField(default=0)
-    fixo_variavel = models.FloatField(default=0)
+    venda = models.FloatField(blank=False, null=False,default=0)
+    parcela_venda = models.FloatField(default=0, blank=False, null=False)
+    moedeiro_encerrante = models.FloatField(default=0, blank=False, null=False)
+    pago = models.FloatField(default=0, blank=False, null=False)
+    bonificado = models.FloatField(default=0, blank=False, null=False)
+    gerencial = models.FloatField(default=0, blank=False, null=False)
+    pago_gotas = models.FloatField(default=0, blank=False, null=False)
+    integracao_gotas = models.FloatField(default=0, blank=False, null=False)
+    maximo = models.FloatField(default=0, blank=False, null=False)
+    minimo = models.FloatField(default=0, blank=False, null=False)
+    fixo = models.FloatField(default=0, blank=False, null=False)
+    fixo_variavel = models.FloatField(default=0, blank=False, null=False)
     data_atualizacao = models.DateField(default=date.today)
     data_ultima_atualizacao = models.DateField(default=date.today)
-    nome_financeiro = models.CharField(max_length=100)
-    descricao = models.CharField(max_length=100)
-    corpo_email = models.TextField(default="0")
+    contrato = models.TextField(default="0", blank=False, null=False)
+    nome_financeiro = models.CharField(max_length=100, blank=False, null=False)
+    email_cobranca = models.CharField(max_length = 100, blank=False, null=False, default="0")
+    corpo_email = models.TextField(default="0", blank=False, null=False)
+    telefone_cobranca = models.CharField(max_length = 100, blank=False, null=False, default="0")
     produto_id = models.OneToOneField(Produto, on_delete=models.CASCADE)
     
     def __str__(self):

@@ -1,12 +1,7 @@
 from django.conf.urls import url, include
 from .views_historico import produtos_historico_cobranca, historico_lista_cobrancas, cobranca_detalhes, edit_billing_status, atualizar_inflacao
-from .views_cobranca import (
-    lista_cobranca,
-    efetuar_cobranca,
-    recalcular,
-    valor_nota,
-    prepara_email
-    )
+from .views_cobranca import ( lista_cobranca, efetuar_cobranca )
+from .logica_cobranca import recalcular, valor_nota
 
 urlpatterns = [
     
@@ -15,19 +10,17 @@ urlpatterns = [
     url(r'^cobranca/(?P<billing_id>\d+)/$', cobranca_detalhes, name='cobranca_detalhes'),
     url(r'^edit_billing_status/(?P<billing_id>\d+)/$', edit_billing_status, name='edit_billing_status'),
     
+    #url da atualização pela inflação
     url(r'^atualizar_inflacao/(?P<type_billing_id>\d+)/$', atualizar_inflacao, name='atualizar_inflacao'),
     
+    #urls da cobrança
     url(r'^cobranca/$', lista_cobranca, name='principal_cobranca'),
     url(r'^cobranca/efetuar_cobranca/(?P<produto_id>\d+)/$', efetuar_cobranca, name='efetuar_cobranca'),
     url(r'^valor_nota/(?P<produto_id>\d+)/$', valor_nota, name='valor_nota'),
 
-    
-   
+    #urls da lógica de cobrança
     url(r'^cobranca/recalcular/$', recalcular, name='recalcular'),
     url(r'^cobranca/calcular/(?P<produto_id>\d+)/$', valor_nota, name='calcular'),
-    
-    url(r'^enviar_email/$', prepara_email, name='enviar_email'),
-    
     
 ]
 

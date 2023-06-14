@@ -1,5 +1,3 @@
-
-
 """""
 ### Lista do cliente   #####
 
@@ -13,7 +11,6 @@ def lista_clientes(request):
     form = PostoForm()
     data = {'listapostos': listapostos, 'form': form, 'query': query}
     return render(request, 'core/lista_cliente.html', data)
-
 
 ######## cadastro do cliente formulario  #####
 

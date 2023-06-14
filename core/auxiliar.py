@@ -1,10 +1,8 @@
-from .models import  Billing
 from datetime import datetime
-from django.db.models import Sum
 import requests
 import pandas as pd
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
+
 
 
 def checar_atualizacao(proxima_atualizacao, status_produto):
@@ -23,16 +21,6 @@ def checar_atualizacao(proxima_atualizacao, status_produto):
             id_typebilling = proxima_atualizacao.id
     
     return data_proxima_atualizacao, atualizar, id_typebilling
-
-
-def total_cobrado(produto_id):
-    
-    try:
-        total_cobrado = Billing.objects.filter(produto_id=produto_id).exclude(status=0).aggregate(total=Sum('cobrado_total'))['total']
-        return total_cobrado if total_cobrado else 0
-    except Exception as e:
-        print("Erro: ", e)
-        return 0
 
 
 def ipca_acumulado():

@@ -117,7 +117,7 @@ def cobranca_detalhes(request, billing_id):
 def edit_billing_status(request, billing_id):
     # Busca a cobrança pelo seu ID.
     cobranca = get_object_or_404(Billing, id=billing_id)
-   
+    
     if request.method == 'POST':
         # Se a requisição for um POST, cria um formulário com os dados enviados e a instância da cobrança.
         form = BillingStatusForm(request.POST, instance=cobranca)

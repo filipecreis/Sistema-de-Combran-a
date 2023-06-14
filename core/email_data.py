@@ -2,6 +2,7 @@ from .models import  Billing
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
+import re
 
 
 class EmailData:
@@ -25,14 +26,14 @@ class EmailData:
     def get_email_variables(self):
         self.calculate_values()
         email_variables = {
-            "{posto}": self.station_data.nome,
+            "{posto}": self.station_data.nome, 
             "{nome_financeiro}": self.billing_data.nome_financeiro,
-            "{mes_atual}": datetime.now().strftime("%m-%Y"),
+            "{mes_atual}": datetime.now().strftime("%m-%Y"), 
             "{mes_anterior}": (datetime.now() - relativedelta(months=1)).strftime("%m-%Y"),
             "{produto}": self.product_type.nome,
             "{moedeiro_v}": self.format_values(self.billing_data.moedeiro_encerrante),
             "{pago_v}": self.format_values(self.billing_data.pago),
-            "{bonificado_v}": self.format_values(self.billing_data.bonificado),
+            "{bonificado_v}": self.format_values(self.billing_data.bonificado), 
             "{gerencial_v}": self.format_values(self.billing_data.gerencial),
             "{gotas_v}": self.format_values(self.billing_data.pago_gotas),
             "{gotas_integrada_v}": self.format_values(self.billing_data.integracao_gotas),
@@ -64,22 +65,24 @@ class EmailData:
         total = 0
         for key, value in email_variables.items():
             email_body = email_body.replace(key, value)
-            if key.endswith("_t"):
+            if key.endswith("_t}"):
                 total += float(value)
+                
         
         if total > self.billing_data.maximo and self.billing_data.maximo != 0:
-            email_body = email_body.replace("{msg_max_min}", "Vale ressaltar que o valor calculado excedeu o valor máximo estabelecido em contrato de " + self.billing_data.maximo + ".")
+            email_body = email_body.replace("{msg_max_min}", f"Vale ressaltar que o valor calculado excedeu o valor máximo estabelecido em contrato de R$ {self.format_values( self.billing_data.minimo)}.")
         elif total < self.billing_data.minimo:
-            email_body = email_body.replace("{msg_max_min}", "Vale ressaltar que o valor calculado não excede o valor mínimo estabelecido em contrato de " + self.billing_data.minimo + ".")
+            email_body = email_body.replace("{msg_max_min}", f"Vale ressaltar que o valor calculado não excede o valor mínimo estabelecido em contrato de R$ {self.format_values(self.billing_data.minimo)}.")
         else:
-            email_body = email_body.replace("{msg_max_min}", "")
+            email_body = re.sub(r"\{msg_max_min\}[\n\r]*", "", email_body)
 
         if self.current_billing.desconto:
-            email_body = email_body.replace("{desconto}", "Desconto Concedido: R$ " + str(self.current_billing.desconto))
+            email_body = email_body.replace("{desconto}", f"Desconto Concedido: R$ {self.format_values(self.current_billing.desconto)}")
         else:
-            email_body = email_body.replace("{desconto}", "")
-
-        subject = f'Boleto' + self.product_type.nome + '-' + self.station_data.nome + '- RTI Soluctions'
+            email_body = re.sub(r"{desconto}[\n\r].", "", email_body, flags=re.DOTALL)
+        
+        
+        subject = f'Boleto ' + self.product_type.nome + ' - ' + self.station_data.nome + ' - RTI Soluctions'
         billing_email = self.billing_data.email_cobranca.split(';')
         print('teste email', billing_email)
         
@@ -104,9 +107,7 @@ class EmailData:
         descricao =  f'{self.descricao_nome()} - {produto} - {nome_posto}'# String
         valor =  self.current_billing.cobrado_total # Float
         dtVenc = self.current_billing.pay_date.strftime("%Y-%m-%d") #String
-        print('dtVenc', dtVenc)
         dtCred = (self.current_billing.pay_date + timedelta(days=1)).strftime("%Y-%m-%d")
-        print('dtCred', dtCred)
         codContato = self.station_data.id_egestor
         
         # Diretôrio = estado / produto / posto

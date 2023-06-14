@@ -4,10 +4,14 @@
   <form id="billingForm" class="container mt-4" method="post">
     {% csrf_token %}
     <div class="form-group">
-
+      <div>
+        <p>Posto: {{ posto }}</p>
+        <p>Produto: {{ produto }}</p>
+        <p>Contrato: {{ contrato }}</p>
+      </div>
+      
       {% if on_precobranca_encerrante %} 
-        <a class="btn btn-primary" href="https://wa.me/{{ numero_telefone }}?text={{ mensagem | urlencode }}" target="_blank">Enviar uma mensagem no WhatsApp</a>
-        <div class="mt-2">
+          <a class="btn btn-primary" href="https://wa.me//55{{ telefone }}" target="_blank">Enviar uma mensagem no WhatsApp</a><div class="mt-2">
           <label for="encerrante">Encerrante:</label>
           <input id="encerrante" class="form-control" name="encerrante" value="{{ form.encerrante.value }}" />
         </div>
@@ -112,7 +116,7 @@
       <div class="mt-2">
         <label for="cobrado_total">Valor da Nota:</label>
         <br>
-        <input id="cobrado_total" class="form-control" name="cobrado_total" value="{{ form.cobrado_total.value }}"/>
+        <input id="cobrado_total" class="form-control" name="cobrado_total" value="{{ form.cobrado_total.value|floatformat:-2 }}" readonly/>
       </div>
 
       <button type="submit" class="btn btn-success mt-3">Submit</button>

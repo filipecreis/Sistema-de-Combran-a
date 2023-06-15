@@ -107,11 +107,11 @@ class Posto(models.Model):
     endereco = models.CharField(max_length = 100, blank=False, null=False)
     cidade = models.CharField(max_length = 100, blank=False, null=False)
     bairro = models.CharField(max_length = 100, blank=False, null=False)
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, blank=False, null=False)
+    estado = models.CharField(max_length=20, blank=False, null=False) #choices=ESTADO_CHOICES
     nome_responsavel = models.CharField(max_length = 100, blank=False, null=False)
     email_responsavel = models.CharField(max_length = 100, blank=False, null=False)
     telefone_responsavel = models.CharField(max_length = 100, blank=False, null=False)
-    id_egestor = models.IntegerField(blank=False, null=False, default=1)
+    id_egestor = models.IntegerField(blank=False, null=False)
     rede_id = models.ForeignKey(Rede_cliente, on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
@@ -168,7 +168,7 @@ class Billing(models.Model):
     produto_id = models.ForeignKey(Produto, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.invoice_date)
+        return str(self.produto_id.nome)
     
 
 class Type_billing(models.Model):
@@ -194,7 +194,7 @@ class Type_billing(models.Model):
     produto_id = models.OneToOneField(Produto, on_delete=models.CASCADE)
     
     def __str__(self):
-        return str(self.pago)
+        return str(self.produto_id.nome)
 
 
 class Ordem_servico(models.Model):

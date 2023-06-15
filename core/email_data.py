@@ -84,7 +84,6 @@ class EmailData:
         
         subject = f'Boleto ' + self.product_type.nome + ' - ' + self.station_data.nome + ' - RTI Soluctions'
         billing_email = self.billing_data.email_cobranca.split(';')
-        print('teste email', billing_email)
         
         return subject, email_body, billing_email
     

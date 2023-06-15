@@ -1,16 +1,17 @@
 from django.shortcuts import render
 from .models import Produto, Type_billing, Billing
 from .forms import BillingForm
+from django.shortcuts import redirect
 from datetime import datetime
-from .auxiliar import checar_atualizacao
 from django.http import HttpResponse
 from .logica_cobranca import tipo_cobranca
 from .preparar_email import enviar_email_cobranca
-from django.shortcuts import redirect
+from .auxiliar import checar_atualizacao
+from .teste import baixar_banco_dados_posto
 
 
 def lista_cobranca(request):
-    
+    baixar_banco_dados_posto()
     produtos_ativos = Produto.objects.filter(status=True)
     produtos_list = []
     
